@@ -34,8 +34,10 @@ export default class VElementLoader extends HTMLElement {
                     let prefix = this.path.replace(/-|\//g,"_");
                     if (module[prefix + "_template"])
                         this.rustTemplate = module[prefix + "_template"]();
-                    let json     = module[prefix + "_create"](this.shadow_root.host.attributes)
-                    let data     = JSON.parse(json);
+                    let json = "{}";
+                    if (module[prefix + "_create"])
+                        json = module[prefix + "_create"](this.shadow_root.host.attributes)
+                    let data = JSON.parse(json);
 
                     await super.connectedCallback();
 
