@@ -4,36 +4,27 @@ export default class VElement extends HTMLElement {
         this.shadow_root = this.attachShadow({mode: 'open'});
     }
 
-    async connectedCallback() {
-        let path = this.path;
-
-        if (this.template === undefined) {
-            let text;
-            if (this.rustTemplate) {
-                text = this.rustTemplate;
-            } else {
-                let response = await fetch(path + "/template.html");
-                text         = await response.text();
-            }
-            let div       = document.createElement("div");
-            div.innerHTML = text;
-            this.template = div.firstChild;
+    get_template() {
+        let text = "";
+        if (this.templateText) {
+            text = this.templateText;
         }
+        let inner_div       = document.createElement("div");
+        inner_div.innerHTML = text;
+        return inner_div.firstChild;
+    }
 
-        let node = document.importNode(this.template.content, true);
+    new_node_from_template(template) {
+        let node = document.importNode(template.content, true);
         let div  = document.createElement("div");
         div.setAttribute("id", "vue");
         div.appendChild(node);
-        this.shadow_root.appendChild(div);
+        return div;
     }
 
-//    static get observedAttributes() {
-//      return ['size'];
-//    }
-
-//    attributeChangedCallback(name, oldValue, newValue) {
-//        let data = {name:name}
-//        console.log(`${data.name} ${oldValue} ${newValue}`);
-//    }
-
+    async connectedCallback() {
+        let template = this.get_template();
+        let node     = this.new_node_from_template(template);
+        this.shadow_root.appendChild(node);
+    }
 }
