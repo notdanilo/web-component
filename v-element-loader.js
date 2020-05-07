@@ -1,88 +1,51 @@
 import { default as VElement } from "./v-element-definition.js"
 
 export default class VElementLoader extends HTMLElement {
-    resolvePath() {
-        let path = this.getAttribute("path");
-        if (path[0] == '/') {
-          path = path.substr(1);
-        } else if (this.getRootNode().host) {
-            path = this.getRootNode().host.path + "/" + path;
-        }
-        return path;
+    getModulePath() {
+        return this.getAttribute("path").replace(/-/g,"_") + ".js";
     }
 
-  async connectedCallback() {
-    let path = this.resolvePath();
-    let name = path.substr(path.lastIndexOf("/") + 1)
-    console.log(name)
-    if (!customElements.get(name)) {
-        class Element extends VElement {
-            constructor() {
-                super(name)
-            }
+    async loadModule(path) {
+        this.module = await import(path);
+        await this.module.default();
+        this.loadComponents();
+    }
 
-            async connectedCallback() {
-                let module = this.module;
+    async connectedCallback() {
+        let path = this.getModulePath();
+        this.loadModule(path).await;
+    }
 
-                let prefix = this.path.replace(/-|\//g,"_");
-                if (module[prefix + "_template"])
-                    this.templateText = module[prefix + "_template"]();
-                let json = "{}";
-                if (module[prefix + "_create"])
-                    json = module[prefix + "_create"](this.shadow_root.host.attributes)
-                let data = JSON.parse(json);
-
-                await super.connectedCallback();
-
-                let el     = this.shadow_root.getElementById("vue");
-
-                // We need to remove style elements from the template because Vue doesn't
-                // compile it.
-                let styles = [];
-                let styles_in_el = el.getElementsByTagName("style");
-                for (var i = 0; i < styles_in_el.length; i++) {
-                    styles.push(styles_in_el[i].parentNode.removeChild(styles_in_el[i]))
-                }
-
-                let slots = [];
-                let slots_in_el = el.getElementsByTagName("slot");
-                for (var i = 0; i < slots_in_el.length; i++) {
-                    let elem = slots_in_el[i];
-                    let id   = "placeholder#" + i;
-                    let placeholder = document.createElement("div");
-                    placeholder.id = id;
-                    elem.replaceWith(placeholder);
-                    slots.push({elem,id})
-                }
-
-                this.vue   = new Vue({el,data});
-
-                // We then put the style elements back.
-                for (var i = 0; i < styles.length; i++) {
-                    this.vue.$el.prepend(styles[i]);
-                }
-
-                for (var i = 0; i < slots.length; i++) {
-                    let slot = slots[i];
-                    this.shadow_root.getElementById(slot.id).replaceWith(slot.elem)
-                }
+    loadComponents() {
+        for (let method in this.module) {
+            var result = method.match(/components_v_(.*)_create/);
+            if (result && result.length == 2) {
+                let elementName = "v-" + result[1];
+                this.loadElement(elementName);
             }
         }
-
-        let module = await import("/v_curriculum.js");
-        await module.default();
-
-        console.log(module)
-
-        let CustomElement;
-        let template;
-        CustomElement = Element;
-        CustomElement.prototype.module = module;
-        CustomElement.prototype.template = template;
-        CustomElement.prototype.path = path;
-        customElements.define(name, CustomElement)
     }
-  }
+
+    loadElement(name) {
+        if (!customElements.get(name)) {
+            class CustomElement extends VElement {}
+            let path = ("components_" + name).replace(/-|\//g,"_");
+            CustomElement.prototype.module = this.module;
+            CustomElement.prototype.path = path;
+            CustomElement.prototype.template = this.createTemplate(path);
+            customElements.define(name, CustomElement)
+        }
+    }
+
+    createTemplate(path) {
+        let template_method = path + "_template";
+            template_method = this.module[template_method];
+        let templateText    = "<template></template>";
+        if (template_method) templateText = template_method();
+        let inner_div       = document.createElement("div");
+        inner_div.innerHTML = templateText;
+        return inner_div.firstChild;
+    }
 }
 
 // Define the new element

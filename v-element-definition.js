@@ -4,17 +4,11 @@ export default class VElement extends HTMLElement {
         this.shadow_root = this.attachShadow({mode: 'open'});
     }
 
-    get_template() {
-        let text = "";
-        if (this.templateText) {
-            text = this.templateText;
-        }
-        let inner_div       = document.createElement("div");
-        inner_div.innerHTML = text;
-        return inner_div.firstChild;
+    getTemplate() {
+        return this.template;
     }
 
-    new_node_from_template(template) {
+    createNodeFromTemplate(template) {
         let node = document.importNode(template.content, true);
         let div  = document.createElement("div");
         div.setAttribute("id", "vue");
@@ -22,9 +16,64 @@ export default class VElement extends HTMLElement {
         return div;
     }
 
+    getAttributes() {
+        return this.shadow_root.host.attributes;
+    }
+
+    createObject() {
+        let module = this.module;
+        let create_method = this.path + "_create";
+            create_method = module[create_method];
+        let json = "{}";
+        if (create_method) json = create_method(this.getAttributes())
+        return JSON.parse(json);
+    }
+
     async connectedCallback() {
-        let template = this.get_template();
-        let node     = this.new_node_from_template(template);
+        let data     = this.createObject();
+        let template = this.getTemplate();
+        let node     = this.createNodeFromTemplate(template);
         this.shadow_root.appendChild(node);
+        this.createBindings(data);
+    }
+
+    createBindings(data) {
+        let el = this.shadow_root.getElementById("vue");
+
+        // We need to remove style elements from the template because Vue doesn't
+        // compile it.
+        let styles = [];
+        let styles_in_el = el.getElementsByTagName("style");
+        for (var i = 0; i < styles_in_el.length; i++) {
+            styles.push(styles_in_el[i].parentNode.removeChild(styles_in_el[i]))
+        }
+
+        // Vue is also not working with standard <slot> tags when a new Vue instance is created.
+        // We can replace it with a <div> placeholder and recover the original slots after the
+        // instance is created.
+        let slots = [];
+        let slots_in_el = el.getElementsByTagName("slot");
+        for (var i = 0; i < slots_in_el.length; i++) {
+            let elem = slots_in_el[i];
+            let id   = "placeholder#" + i;
+            let placeholder = document.createElement("div");
+            placeholder.id = id;
+            elem.replaceWith(placeholder);
+            slots.push({elem,id})
+        }
+
+        Vue.config.silent = true;
+        this.vue = new Vue({el,data});
+
+        // We then put the style elements back.
+        for (var i = 0; i < styles.length; i++) {
+            this.vue.$el.prepend(styles[i]);
+        }
+
+        // We can now get the slots back.
+        for (var i = 0; i < slots.length; i++) {
+            let slot = slots[i];
+            this.shadow_root.getElementById(slot.id).replaceWith(slot.elem)
+        }
     }
 }
