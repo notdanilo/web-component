@@ -1,0 +1,18 @@
+<template>
+    <style>
+        .knowledge {
+            display: flex;
+            flex-direction: row;
+        }
+        .name {
+            background-color: black;
+            color: white;
+        }
+        div {
+            padding-bottom: 2px;
+        }
+    </style>
+    <div class="knowledge">
+        <v-infobar :black="name" :white="info.toString().replace(/,/g, ', ').toLowerCase()"></v-infobar>
+    </div>
+</template>

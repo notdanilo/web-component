@@ -1,0 +1,25 @@
+<template>
+    <style>
+      .bar {
+        display: flex;
+        flex-direction: row;
+        font-size: 13px;
+      }
+      .black {
+        background-color: black;
+        color: white;
+        font-weight: bold;
+      }
+      .white {
+        border: 1px solid black;
+        font-style: italic;
+      }
+      .black, .white {
+        padding: 0px 4px 0px 4px;
+      }
+    </style>
+    <div class="bar">
+        <div class="black">{{ black.toLowerCase() }}</div>
+        <div class="white">{{ white.toLowerCase() }}</div>
+    </div>
+</template>

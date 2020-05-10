@@ -1,0 +1,18 @@
+<template>
+    <style>
+      .section {
+        border-top: 1px solid black;
+        margin-top: 20px;
+        padding-top: 20px;
+      }
+      .name {
+        font-weight: bold;
+        font-size: 20px;
+        margin-bottom: 10px;
+      }
+    </style>
+    <div class="section">
+        <div class="name">{{ name }}</div>
+        <slot name="slot">fill me</slot>
+    </div>
+</template>

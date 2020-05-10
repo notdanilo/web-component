@@ -7,7 +7,7 @@ export default class VElementLoader extends HTMLElement {
 
     async loadModule(path) {
         this.module = await import(path);
-        await this.module.default();
+        if (this.module.default) await this.module.default();
         this.loadComponents();
     }
 

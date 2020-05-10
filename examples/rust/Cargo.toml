@@ -1,8 +1,11 @@
 [package]
-name    = "v-element"
+name    = "v-clock"
 version = "0.1.0"
 authors = ["Danilo Guanabara <danguafer@gmail.com>"]
 edition = "2018"
+
+[lib]
+crate-type = ["cdylib"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
@@ -11,6 +14,8 @@ serde        = { version = "1.0.104", features = [ "derive" ] }
 serde_json   = "1.0.48"
 wasm-bindgen = "0.2.58"
 paste        = "0.1.8"
+v-element    = { path = "../../rust" }
+js-sys       = { version = "0.3.28" }
 
 [dependencies.web-sys]
 version  = "0.3.35"
@@ -19,9 +24,10 @@ features = [
     "Document",
     "Element",
     "HtmlElement",
-    "ShadowRoot",
     "CssStyleDeclaration",
     "NamedNodeMap",
     "Attr",
-    "console"
+    "console",
+    "CanvasRenderingContext2d",
+    "HtmlCanvasElement"
 ]

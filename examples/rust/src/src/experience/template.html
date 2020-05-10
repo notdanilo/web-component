@@ -1,0 +1,46 @@
+<template>
+    <style scoped>
+        .bar {
+            display: flex;
+            flex-direction: row;
+        }
+        .black {
+            background-color: black;
+            color: white;
+        }
+        .white {
+            border: 1px solid black;
+        }
+        .black, .white {
+            padding: 2px 4px 0px 4px;
+        }
+        .keywords {
+            font-size: 10px;
+            font-style: italic;
+            margin-top: 5px;
+            margin-bottom: 20px;
+        }
+        .period {
+            font-size: 13px;
+            margin-top: 2px;
+        }
+        .role {
+            font-weight: bold;
+            font-size: 17px;
+            margin-top: 7px;
+            margin-bottom: 10px;
+        }
+        .experience {
+            page-break-inside: avoid;
+        }
+    </style>
+    <div class="experience">
+        <v-infobar :black="company" :white="description"></v-infobar>
+        <div class="period">{{ role.period }}. {{ role.location }}</div>
+        <div class="role">{{ role.name }}</div>
+        <div v-for="line in role.activities.split('\n')" v-bind:key="line">
+            {{ line.length == 0 ? "&nbsp;" : line }}
+        </div>
+        <div class="keywords">keywords: {{ role.keywords.toString().toLowerCase().replace(/,/g, ", ") }}</div>
+    </div>
+</template>
