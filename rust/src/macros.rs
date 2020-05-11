@@ -3,14 +3,27 @@ macro_rules! webview {
     ($name:ident) => {
         paste::item! {
             #[wasm_bindgen]
-            pub fn [<components_v_ $name:lower _create>](attributes:NamedNodeMap) -> String {
+            pub fn [<components_v_ $name:lower _create>](attributes:NamedNodeMap) -> usize {
                 let object = $name::new_view(attributes);
-                json::to_string(&object).unwrap()
+                unsafe {
+                    v_element::OBJECTS_REGISTER.register_object(Box::new(object))
+                }
             }
 
             #[wasm_bindgen]
-            pub fn [<components_v_ $name:lower _initialize>](shadow_root:ShadowRoot) {
-                $name::initialize(shadow_root);
+            pub fn [<components_v_ $name:lower _get_data>](object:usize) -> String {
+                unsafe {
+                    let object = v_element::OBJECTS_REGISTER.object(object);
+                    object.get_data()
+                }
+            }
+
+            #[wasm_bindgen]
+            pub fn [<components_v_ $name:lower _on_loaded>](object:usize, shadow_root:ShadowRoot) {
+                unsafe {
+                    let object = v_element::OBJECTS_REGISTER.object(object);
+                    object.on_loaded(shadow_root);
+                }
             }
         }
     }

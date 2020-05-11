@@ -10,16 +10,25 @@ use std::f64::consts::PI;
 
 #[derive(Serialize,Deserialize,Debug,Default)]
 pub struct Clock {
-    pub time : String
+    pub time : String,
+    #[serde(skip)]
+    closure  : Option<Closure<dyn FnMut()>>
+}
+
+impl Clock {
+    fn new_view(_attributes:NamedNodeMap) -> Self {
+        let time    = "now".into();
+        let closure = None;
+        Self {time,closure}
+    }
 }
 
 impl WebView for Clock {
-    fn new_view(_attributes:NamedNodeMap) -> Self {
-        let time = "now".into();
-        Self {time}
+    fn get_data(&self) -> String {
+        json::to_string(&self).unwrap()
     }
 
-    fn initialize(shadow_root:ShadowRoot) {
+    fn on_loaded(&mut self,shadow_root:ShadowRoot) {
         let canvas  = shadow_root.get_element_by_id("canvas").expect("Couldn't get canvas.");
         let canvas  = canvas.dyn_into::<HtmlCanvasElement>().expect("Couldn't convert canvas.");
         let context = canvas.get_context("2d").expect("Couldn't get context.").expect("Context.");
@@ -87,7 +96,7 @@ impl WebView for Clock {
 
         let window = web_sys::window().expect("Window");
         window.set_interval_with_callback(&function).ok();
-        std::mem::forget(closure);
+        self.closure = Some(closure);
     }
 }
 

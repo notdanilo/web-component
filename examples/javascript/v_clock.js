@@ -1,8 +1,16 @@
 export function components_v_clock_create(attributes) {
-    return JSON.stringify({time:"now"})
+    return {
+        "data" : {
+            "timezone" : attributes.getNamedItem("timezone").value
+        }
+    }
 }
 
-export function components_v_clock_initialize(shadowRoot) {
+export function components_v_clock_get_data(object) {
+    return JSON.stringify(object.data)
+}
+
+export function components_v_clock_on_loaded(object,shadowRoot) {
     let canvas  = shadowRoot.getElementById("canvas");
     let context = canvas.getContext("2d");
     let size = shadowRoot.host.getAttribute("size");
@@ -67,5 +75,5 @@ export function components_v_clock_initialize(shadowRoot) {
 }
 
 export function components_v_clock_template() {
-    return '<template><canvas id="canvas"></canvas></template>'
+    return '<template><center>Timezone: {{ timezone }}<br/><canvas id="canvas"></canvas></center></template>'
 }
