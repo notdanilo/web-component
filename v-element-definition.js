@@ -16,37 +16,14 @@ export default class VElement extends HTMLElement {
         return div;
     }
 
-    createObject() {
-        let module = this.module;
-        let create_method = this.path + "_create";
-            create_method = module[create_method];
-        return create_method(this.shadowRoot.host.attributes);
-    }
-
-    getData() {
-        let module = this.module;
-        let get_data_method = this.path + "_get_data";
-            get_data_method = module[get_data_method];
-        let json = "{}";
-        if (get_data_method) json = get_data_method(this.object);
-        return JSON.parse(json);
-    }
-
-    elementIsLoaded() {
-        let module = this.module;
-        let on_loaded_method = this.path + "_on_loaded";
-            on_loaded_method = module[on_loaded_method];
-        if (on_loaded_method) on_loaded_method(this.object,this.shadowRoot);
-    }
-
     async connectedCallback() {
-        this.object  = this.createObject();
+        this.object  = this.createObject(this.shadowRoot.host.attributes);
         let data     = this.getData();
         let template = this.getTemplate();
         let node     = this.createNodeFromTemplate(template);
         this.shadowRoot.appendChild(node);
         this.createBindings(data);
-        this.elementIsLoaded();
+        this.onLoaded(this.shadowRoot);
     }
 
     createBindings(data) {

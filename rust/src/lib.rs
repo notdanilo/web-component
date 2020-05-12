@@ -1,4 +1,8 @@
 pub mod macros;
+/// pub mod traits;
+/// pub use traits::WebView;
+/// pub mod objects_register;
+/// pub use objects_register::OBJECTS_REGISTER;
 
 pub use serde::{Serialize, Deserialize};
 pub use wasm_bindgen::prelude::*;

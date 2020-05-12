@@ -10,16 +10,16 @@ use std::f64::consts::PI;
 
 #[derive(Serialize,Deserialize,Debug,Default)]
 pub struct Clock {
-    pub time : String,
+    pub timezone : i32,
     #[serde(skip)]
     closure  : Option<Closure<dyn FnMut()>>
 }
 
 impl Clock {
-    fn new_view(_attributes:NamedNodeMap) -> Self {
-        let time    = "now".into();
-        let closure = None;
-        Self {time,closure}
+    fn create_view(attributes:NamedNodeMap) -> Self {
+        let timezone = attributes.get_named_item("timezone").unwrap().value().parse().unwrap();
+        let closure  = None;
+        Self {timezone,closure}
     }
 }
 
@@ -36,7 +36,6 @@ impl WebView for Clock {
         let size = shadow_root.host().get_attribute("size").expect("Coudln't get size.");
         canvas.set_attribute("width", &size).ok();
         canvas.set_attribute("height", &size).ok();
-        context.fill_rect(0.0, 0.0, canvas.width() as f64, canvas.height() as f64);
 
         let draw = move || {
             let width = canvas.width() as f64;
