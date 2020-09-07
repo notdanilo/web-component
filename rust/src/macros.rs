@@ -1,10 +1,10 @@
 #[macro_export]
-macro_rules! webview {
+macro_rules! web_component {
     ($name:ident) => {
         paste::item! {
             #[wasm_bindgen]
             pub fn [<components_v_ $name:lower _create>](attributes:NamedNodeMap) -> usize {
-                let object = $name::create_view(attributes);
+                let object = $name::create_component(attributes);
                 unsafe {
                     v_element::OBJECTS_REGISTER.register_object(Box::new(object))
                 }
@@ -42,7 +42,7 @@ macro_rules! template {
 }
 
 #[macro_export]
-macro_rules! webview_package {
+macro_rules! package {
     () => {
         #[wasm_bindgen::prelude::wasm_bindgen]
         pub fn v_component_target_language_rust() {}

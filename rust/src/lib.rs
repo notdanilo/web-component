@@ -1,8 +1,9 @@
 pub mod macros;
-/// pub mod traits;
-/// pub use traits::WebView;
-/// pub mod objects_register;
-/// pub use objects_register::OBJECTS_REGISTER;
+// TODO: Reorganize code as suggested:
+// pub mod traits;
+// pub use traits::web_component;
+// pub mod objects_register;
+// pub use objects_register::OBJECTS_REGISTER;
 
 pub use serde::{Serialize, Deserialize};
 pub use wasm_bindgen::prelude::*;
@@ -11,7 +12,8 @@ pub use serde_json as json;
 pub use web_sys::NamedNodeMap;
 pub use web_sys::ShadowRoot;
 
-pub trait WebView {
+pub trait WebComponent {
+    fn create_component(attributes:NamedNodeMap) -> Self where Self: Sized;
     fn get_data(&self) -> String;
     fn on_loaded(&mut self,_shadow_root:ShadowRoot) {}
 }
@@ -41,6 +43,6 @@ impl<T> ObjectsRegister<T> {
     }
 }
 
-pub static mut OBJECTS_REGISTER : ObjectsRegister<Box<dyn WebView>> = ObjectsRegister {
+pub static mut OBJECTS_REGISTER : ObjectsRegister<Box<dyn WebComponent>> = ObjectsRegister {
     register : None
 };

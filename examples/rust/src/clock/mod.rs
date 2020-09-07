@@ -15,15 +15,13 @@ pub struct Clock {
     closure  : Option<Closure<dyn FnMut()>>
 }
 
-impl Clock {
-    fn create_view(attributes:NamedNodeMap) -> Self {
+impl WebComponent for Clock {
+    fn create_component(attributes:NamedNodeMap) -> Self {
         let timezone = attributes.get_named_item("timezone").unwrap().value().parse().unwrap();
         let closure  = None;
         Self {timezone,closure}
     }
-}
 
-impl WebView for Clock {
     fn get_data(&self) -> String {
         json::to_string(&self).unwrap()
     }
@@ -99,5 +97,5 @@ impl WebView for Clock {
     }
 }
 
-webview!(Clock);
+web_component!(Clock);
 template!(Clock);
