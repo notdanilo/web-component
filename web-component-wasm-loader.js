@@ -1,6 +1,6 @@
-import VElementRust from "./v-element-rust.js"
+import WebComponentWASM from "./web-component-wasm.js"
 
-export default class VRustLoader {
+export default class WebComponentWASMLoader {
     async load(module) {
         if (module.default) await module.default();
         this.loadComponents(module);
@@ -8,9 +8,9 @@ export default class VRustLoader {
 
     loadComponents(module) {
         for (let method in module) {
-            var result = method.match(/components_v_(.*)_create/);
+            var result = method.match(/components_web_(.*)_create/);
             if (result && result.length == 2) {
-                let elementName = "v-" + result[1];
+                let elementName = "web-" + result[1];
                 this.loadElement(module,elementName);
             }
         }
@@ -18,7 +18,7 @@ export default class VRustLoader {
 
     loadElement(module,name) {
         if (!customElements.get(name)) {
-            class CustomElement extends VElementRust {}
+            class CustomElement extends WebComponentWASM {}
             let path = ("components_" + name).replace(/-|\//g,"_");
             CustomElement.prototype.module   = module;
             CustomElement.prototype.path     = path;

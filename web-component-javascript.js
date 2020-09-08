@@ -1,6 +1,6 @@
-import VElement from "./v-element-definition.js"
+import WebComponent from "./web-component-definition.js"
 
-export default class VElementJavaScript extends VElement {
+export default class WebComponentJavaScript extends WebComponent {
     static template() { return "<template></template>" }
 
     createObject(attributes) {

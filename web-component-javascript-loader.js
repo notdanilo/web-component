@@ -1,15 +1,15 @@
-import VElementJavaScript from "./v-element-javascript.js"
+import WebComponentJavaScript from "./web-component-javascript.js"
 
-export default class VJavaScriptLoader {
+export default class WebComponentJavaScriptLoader {
     async load(module) {
         this.class = module.default;
-        let elementName = "v-" + this.class.name.substring(1).toLowerCase();
+        let elementName = "web-" + this.class.name.substring(3).toLowerCase();
         this.loadElement(module,elementName)
     }
 
     loadElement(module,name) {
         if (!customElements.get(name)) {
-            class CustomElement extends VElementJavaScript {}
+            class CustomElement extends WebComponentJavaScript {}
             CustomElement.prototype.class    = this.class;
             CustomElement.prototype.template = this.createTemplateFromString(this.class.template());
             customElements.define(name, CustomElement)

@@ -1,4 +1,4 @@
-export default class VClock {
+export default class WebClock {
     constructor(attributes) {
         this.data = {
             "timezone" : attributes.getNamedItem("timezone").value

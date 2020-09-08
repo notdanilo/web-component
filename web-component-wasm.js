@@ -1,6 +1,6 @@
-import VElement from "./v-element-definition.js"
+import WebComponent from "./web-component-definition.js"
 
-export default class VElementRust extends VElement {
+export default class WebComponentWASM extends WebComponent {
     createObject() {
         let module = this.module;
         let create_method = this.path + "_create";
