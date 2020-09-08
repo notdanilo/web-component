@@ -1,4 +1,5 @@
 pub mod prelude;
 pub mod clock;
 
-prelude::package!();
+use prelude::*;
+package!();

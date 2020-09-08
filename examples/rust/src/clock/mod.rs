@@ -2,6 +2,7 @@ use crate::prelude::*;
 
 use web_sys::HtmlCanvasElement;
 use web_sys::CanvasRenderingContext2d;
+use wasm_bindgen::JsCast;
 
 use js_sys::Math::*;
 use js_sys::Date;
@@ -16,17 +17,13 @@ pub struct Clock {
 }
 
 impl WebComponent for Clock {
-    fn create_component(attributes:NamedNodeMap) -> Self {
+    fn create_component(attributes: NamedNodeMap) -> Self {
         let timezone = attributes.get_named_item("timezone").unwrap().value().parse().unwrap();
         let closure  = None;
         Self {timezone,closure}
     }
 
-    fn get_data(&self) -> String {
-        json::to_string(&self).unwrap()
-    }
-
-    fn on_loaded(&mut self,shadow_root:ShadowRoot) {
+    fn on_loaded(&mut self, shadow_root: ShadowRoot) {
         let canvas  = shadow_root.get_element_by_id("canvas").expect("Couldn't get canvas.");
         let canvas  = canvas.dyn_into::<HtmlCanvasElement>().expect("Couldn't convert canvas.");
         let context = canvas.get_context("2d").expect("Couldn't get context.").expect("Context.");
