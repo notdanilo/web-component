@@ -23,4 +23,11 @@ export default class WebComponentWASM extends WebComponent {
             on_loaded_method = module[on_loaded_method];
         if (on_loaded_method) on_loaded_method(this.object,this.shadowRoot);
     }
+
+    updateData(data) {
+        let module = this.module;
+        let update_data_method = this.path + "_update_data";
+            update_data_method = module[update_data_method];
+        if (update_data_method) update_data_method(this.object,data);
+    }
 }

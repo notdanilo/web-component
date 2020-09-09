@@ -1,4 +1,4 @@
-export default class VElement extends HTMLElement {
+export default class WebComponent extends HTMLElement {
     constructor() {
         super()
         this.attachShadow({mode: 'open'});
@@ -52,7 +52,17 @@ export default class VElement extends HTMLElement {
         }
 
         Vue.config.silent = true;
-        this.vue = new Vue({el,data});
+
+        // Watch changes.
+        let watch = {};
+        for (var i in data) {
+            watch[i] = function(new_val,_) {
+                let data = JSON.stringify(this.$data);
+                this.web_component.updateData(data);
+            }
+        }
+        this.vue = new Vue({el,data,watch});
+        this.vue.web_component = this;
 
         // We then put the style elements back.
         for (var i = 0; i < styles.length; i++) {
