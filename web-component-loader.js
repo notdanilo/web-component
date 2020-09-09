@@ -11,7 +11,7 @@ export default class WebComponentLoader extends HTMLElement {
     }
 
     createLoader(module) {
-        if (module["web_component_target_wasm"])
+        if (module["web_component_target_wasm"] || module.default.name == "init")
             return new WebComponentWASMLoader();
         else
             return new WebComponentJavaScriptLoader();
