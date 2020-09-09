@@ -1,2 +1,2 @@
-# v-element
-HTML5 CustomElement
+# web-component
+A library for easily creating Web Components.
