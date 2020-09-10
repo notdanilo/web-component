@@ -24,10 +24,10 @@ export default class WebComponentWASM extends WebComponent {
         if (on_loaded_method) on_loaded_method(this.object,this.shadowRoot);
     }
 
-    updateData(data) {
+    updateField(name, value) {
         let module = this.module;
-        let update_data_method = this.path + "_update_data";
-            update_data_method = module[update_data_method];
-        if (update_data_method) update_data_method(this.object,data);
+        let update_field_method = this.path + "_update_field";
+            update_field_method = module[update_field_method];
+        if (update_field_method) update_field_method(this.object, name, value);
     }
 }
