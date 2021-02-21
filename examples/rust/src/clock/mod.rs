@@ -9,7 +9,12 @@ use js_sys::Date;
 use js_sys::Function;
 use std::f64::consts::PI;
 
-#[derive(Serialize,Deserialize,Debug,Default)]
+#[derive(Serialize,Deserialize)]
+pub struct Attributes {
+    timezone: u32
+}
+
+#[derive(Serialize,Deserialize,WebComponent,Debug,Default)]
 pub struct Clock {
     pub timezone : i32,
     #[serde(skip)]
@@ -18,7 +23,11 @@ pub struct Clock {
 
 impl WebComponent for Clock {
     fn create_component(attributes: NamedNodeMap) -> Self {
-        let timezone = attributes.get_named_item("timezone").unwrap().value().parse().unwrap();
+        let timezone = if let Some(timezone) = attributes.get_named_item("timezone") {
+            timezone.value().parse().unwrap()
+        } else {
+            0
+        };
         let closure  = None;
         Self {timezone,closure}
     }
@@ -28,7 +37,7 @@ impl WebComponent for Clock {
         let canvas  = canvas.dyn_into::<HtmlCanvasElement>().expect("Couldn't convert canvas.");
         let context = canvas.get_context("2d").expect("Couldn't get context.").expect("Context.");
         let context = context.dyn_into::<CanvasRenderingContext2d>().expect("Couldn't get context.");
-        let size = shadow_root.host().get_attribute("size").expect("Coudln't get size.");
+        let size: String = shadow_root.host().get_attribute("size").map(|size| size.into()).unwrap_or("128".into());
         canvas.set_attribute("width", &size).ok();
         canvas.set_attribute("height", &size).ok();
 
@@ -94,5 +103,4 @@ impl WebComponent for Clock {
     }
 }
 
-web_component!(Clock);
 template!(Clock);

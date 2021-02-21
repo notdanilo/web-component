@@ -191,13 +191,13 @@ dependencies = [
  "serde 1.0.106 (registry+https://github.com/rust-lang/crates.io-index)",
  "serde_json 1.0.52 (registry+https://github.com/rust-lang/crates.io-index)",
  "wasm-bindgen 0.2.62 (registry+https://github.com/rust-lang/crates.io-index)",
- "web-component 0.1.1 (registry+https://github.com/rust-lang/crates.io-index)",
+ "web-component 0.1.5 (registry+https://github.com/rust-lang/crates.io-index)",
  "web-sys 0.3.39 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
 name = "web-component"
-version = "0.1.1"
+version = "0.1.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 dependencies = [
  "erased-serde 0.3.12 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -205,7 +205,17 @@ dependencies = [
  "serde 1.0.106 (registry+https://github.com/rust-lang/crates.io-index)",
  "serde_json 1.0.52 (registry+https://github.com/rust-lang/crates.io-index)",
  "wasm-bindgen 0.2.62 (registry+https://github.com/rust-lang/crates.io-index)",
+ "web-component-derive 0.1.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "web-sys 0.3.39 (registry+https://github.com/rust-lang/crates.io-index)",
+]
+
+[[package]]
+name = "web-component-derive"
+version = "0.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+dependencies = [
+ "quote 1.0.4 (registry+https://github.com/rust-lang/crates.io-index)",
+ "syn 1.0.19 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -241,5 +251,6 @@ dependencies = [
 "checksum wasm-bindgen-macro 0.2.62 (registry+https://github.com/rust-lang/crates.io-index)" = "2cd85aa2c579e8892442954685f0d801f9129de24fa2136b2c6a539c76b65776"
 "checksum wasm-bindgen-macro-support 0.2.62 (registry+https://github.com/rust-lang/crates.io-index)" = "8eb197bd3a47553334907ffd2f16507b4f4f01bbec3ac921a7719e0decdfe72a"
 "checksum wasm-bindgen-shared 0.2.62 (registry+https://github.com/rust-lang/crates.io-index)" = "a91c2916119c17a8e316507afaaa2dd94b47646048014bbdf6bef098c1bb58ad"
-"checksum web-component 0.1.1 (registry+https://github.com/rust-lang/crates.io-index)" = "ba481c6fd5a0c5dbc0c2487985d6558eac225b2394e233bae98536140e54b6a3"
+"checksum web-component 0.1.5 (registry+https://github.com/rust-lang/crates.io-index)" = "30482315f85a382e9de59bfc79c5e15dffc07a51ca443348d5f0aa0edd7a4c1f"
+"checksum web-component-derive 0.1.0 (registry+https://github.com/rust-lang/crates.io-index)" = "de09e220f74299f72c92de6b3389fa2540b3329b85be853cf7ec2a007e3a0f9b"
 "checksum web-sys 0.3.39 (registry+https://github.com/rust-lang/crates.io-index)" = "8bc359e5dd3b46cb9687a051d50a2fdd228e4ba7cf6fcf861a5365c3d671a642"
