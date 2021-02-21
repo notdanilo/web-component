@@ -19,6 +19,7 @@ export default class WebComponentLoader extends HTMLElement {
 
     async load() {
         let path   = this.getModulePath();
+        console.log(path);
         let module = await import(path);
         let loader = this.createLoader(module);
         await loader.load(module);
