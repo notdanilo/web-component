@@ -3,7 +3,9 @@ import WebComponentJavaScriptLoader from "./web-component-javascript-loader.js"
 
 export default class WebComponentLoader extends HTMLElement {
     getModulePath() {
-        return this.getAttribute("path").replace(/-/g,"_") + ".js";
+        let path = this.getAttribute("path").replace(/-/g,"_") + ".js";
+        if (path[0] == '/') path = location.href.substring(0, location.href.length-1) + path;
+        return path;
     }
 
     async connectedCallback() {
@@ -19,7 +21,6 @@ export default class WebComponentLoader extends HTMLElement {
 
     async load() {
         let path   = this.getModulePath();
-        console.log(path);
         let module = await import(path);
         let loader = this.createLoader(module);
         await loader.load(module);
