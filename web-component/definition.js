@@ -1,8 +1,15 @@
+import { logger } from "./logger.js";
+let subLogger = logger.sub("definition");
+
 export default class WebComponent extends HTMLElement {
     constructor() {
         super()
         this.attachShadow({mode: 'open'});
+        this.logger = subLogger.sub(this.localName);
+        this.logger.info(`Constructed.`)
     }
+
+    static template() { return "<template></template>" }
 
     getTemplate() {
         return this.template;
@@ -13,6 +20,7 @@ export default class WebComponent extends HTMLElement {
         let div  = document.createElement("div");
         div.setAttribute("id", "vue");
         div.appendChild(node);
+        this.logger.info(`Node created from template.`);
         return div;
     }
 
@@ -24,6 +32,7 @@ export default class WebComponent extends HTMLElement {
         this.shadowRoot.appendChild(node);
         this.createBindings(data);
         this.onLoaded(this.shadowRoot);
+        this.logger.info(`Connected to DOM.`);
     }
 
     createBindings(data) {
@@ -76,5 +85,6 @@ export default class WebComponent extends HTMLElement {
             let slot = slots[i];
             this.shadowRoot.getElementById(slot.id).replaceWith(slot.elem)
         }
+        this.logger.info(`Bindings created.`)
     }
 }

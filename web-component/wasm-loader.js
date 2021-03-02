@@ -1,12 +1,18 @@
-import WebComponentWASM from "./web-component-wasm.js"
+import WebComponentWASM from "./wasm.js"
 
 export default class WebComponentWASMLoader {
+    constructor(logger) {
+        this.logger = logger.sub("javascript");
+        this.logger.info("Loader constructed.");
+    }
+
     async load(module) {
         if (module.default) await module.default();
         this.loadComponents(module);
     }
 
     loadComponents(module) {
+        this.logger.info(`Loading components.`);
         for (let method in module) {
             var result = method.match(/components_web_(.*)_create/);
             if (result && result.length == 2) {
@@ -23,7 +29,10 @@ export default class WebComponentWASMLoader {
             CustomElement.prototype.module   = module;
             CustomElement.prototype.path     = path;
             CustomElement.prototype.template = this.createTemplate(module,path);
-            customElements.define(name, CustomElement)
+            customElements.define(name, CustomElement);
+            this.logger.info(`<${name}> element registered.`);
+        } else {
+            this.logger.warn(`<${name}> is already registered.`);
         }
     }
 

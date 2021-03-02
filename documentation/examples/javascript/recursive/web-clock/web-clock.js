@@ -5,8 +5,9 @@ export default class WebClock {
         }
     }
 
-    static template() {
-        return '<template><center>Timezone: {{ timezone }}<br/><canvas id="canvas"></canvas></center></template>'
+    static async template() {
+        var response = await fetch(`${import.meta.url.substring(0,import.meta.url.lastIndexOf("/"))}/template.html`);
+        return response.text();
     }
 
     onLoaded(shadowRoot) {
