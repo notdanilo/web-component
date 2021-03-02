@@ -1,6 +1,6 @@
 import WebComponent from "./definition.js"
 
-export default class WebComponentWASM extends WebComponent {
+export default class WASMWebComponent extends WebComponent {
     createObject() {
         let module = this.module;
         let create_method = this.path + "_create";

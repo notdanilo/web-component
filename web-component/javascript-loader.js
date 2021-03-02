@@ -1,6 +1,6 @@
-import WebComponentJavaScript from "./javascript.js"
+import JavaScriptWebComponent from "./javascript.js"
 
-export default class WebComponentJavaScriptLoader {
+export default class JavaScriptWebComponentLoader {
     constructor(logger) {
         this.logger = logger.sub("javascript");
         this.logger.info("Loader constructed.");
@@ -15,7 +15,7 @@ export default class WebComponentJavaScriptLoader {
 
     async loadElement(module,name) {
         if (!customElements.get(name)) {
-            class CustomElement extends WebComponentJavaScript {}
+            class CustomElement extends JavaScriptWebComponent {}
             CustomElement.prototype.class    = this.class;
             CustomElement.prototype.template = this.createTemplateFromString(await this.class.template());
             customElements.define(name, CustomElement);

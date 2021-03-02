@@ -1,5 +1,5 @@
-import WebComponentWASMLoader       from "./wasm-loader.js"
-import WebComponentJavaScriptLoader from "./javascript-loader.js"
+import WASMWebComponentLoader       from "./wasm-loader.js"
+import JavaScriptWebComponentLoader from "./javascript-loader.js"
 import { logger }                   from "./logger.js"
 
 let subLogger = logger.sub("loader");
@@ -26,10 +26,10 @@ export default class WebComponentLoader extends HTMLElement {
     createLoader(module) {
         if (module["web_component_target_wasm"] || module.default.name == "init") {
             this.logger.info("Loading as WASM.");
-            return new WebComponentWASMLoader(this.logger);
+            return new WASMWebComponentLoader(this.logger);
         } else {
             this.logger.info("Loading as JavaScript.");
-            return new WebComponentJavaScriptLoader(this.logger);
+            return new JavaScriptWebComponentLoader(this.logger);
         }
     }
 

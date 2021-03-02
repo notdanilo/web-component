@@ -1,6 +1,6 @@
-import WebComponentWASM from "./wasm.js"
+import WASMWebComponent from "./wasm.js"
 
-export default class WebComponentWASMLoader {
+export default class WASMWebComponentLoader {
     constructor(logger) {
         this.logger = logger.sub("javascript");
         this.logger.info("Loader constructed.");
