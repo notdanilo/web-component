@@ -1,33 +1,56 @@
-import WebComponent from "./base.js"
+import WebComponent from "./web-component.js"
 
 export default class WASMWebComponent extends WebComponent {
+    constructor() {
+        super();
+        this.ffi_create       = this.#getMethod("create");
+        this.ffi_template     = this.#getMethod("template");
+        this.ffi_get_data     = this.#getMethod("get_data");
+        this.ffi_update_field = this.#getMethod("update_field");
+        this.ffi_on_loaded    = this.#getMethod("on_loaded");
+    }
+
+    #getMethod(name) {
+        let module = this.module.instance;
+        let method = `${this.path}_${name}`;
+            method = module[method];
+        return method;
+    }
+
+    async template() {
+        return this.ffi_template();
+    }
+
     createObject() {
-        let module = this.module;
-        let create_method = this.path + "_create";
-            create_method = module[create_method];
-        return create_method(this.shadowRoot.host.attributes);
+        return this.ffi_create(this.shadowRoot.host.attributes);
     }
 
     getData() {
-        let module = this.module;
-        let get_data_method = this.path + "_get_data";
-            get_data_method = module[get_data_method];
         let json = "{}";
-        if (get_data_method) json = get_data_method(this.object);
+        if (this.ffi_get_data) json = this.ffi_get_data(this.object);
         return JSON.parse(json);
     }
 
-    onLoaded() {
-        let module = this.module;
-        let on_loaded_method = this.path + "_on_loaded";
-            on_loaded_method = module[on_loaded_method];
-        if (on_loaded_method) on_loaded_method(this.object,this.shadowRoot);
+    onload() {
+        return this.ffi_on_loaded(this.object, this.shadowRoot);
     }
 
     updateField(name, value) {
-        let module = this.module;
-        let update_field_method = this.path + "_update_field";
-            update_field_method = module[update_field_method];
-        if (update_field_method) update_field_method(this.object, name, value);
+        this.ffi_update_field(this.object, name, value);
+    }
+
+    async connectedCallback() {
+        this.object = this.createObject(this.shadowRoot.host.attributes);
+
+//        for (var name in data) {
+//            watch[name] = (function(name) {
+//                return function(new_val,_) {
+//                    let data = JSON.stringify(new_val);
+//                    this.web_component.updateField(name, data);
+//                }
+//            })(name)
+//        }
+
+        super.connectedCallback();
     }
 }

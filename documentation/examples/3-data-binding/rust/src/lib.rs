@@ -1,11 +1,5 @@
 use web_component::prelude::*;
 
-package!();
+pub mod web_status;
 
-// #[cfg(test)]
-// mod tests {
-//     #[test]
-//     fn it_works() {
-//         assert_eq!(2 + 2, 4);
-//     }
-// }
+package!();

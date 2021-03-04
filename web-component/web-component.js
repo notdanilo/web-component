@@ -60,15 +60,6 @@ export default class WebComponent extends HTMLElement {
 
         // Watch changes.
         let watch = {};
-// FIXME: Maybe this is only needed for implementing dual-way data binding in WASM.
-//        for (var name in data) {
-//            watch[name] = (function(name) {
-//                return function(new_val,_) {
-//                    let data = JSON.stringify(new_val);
-//                    this.web_component.updateField(name, data);
-//                }
-//            })(name)
-//        }
         this.vue = new Vue({el,data,watch});
         this.vue.web_component = this;
 
