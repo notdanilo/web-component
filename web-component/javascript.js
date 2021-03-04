@@ -1,4 +1,4 @@
-import WebComponent from "./definition.js"
+import WebComponent from "./base.js"
 
 export default class JavaScriptWebComponent extends WebComponent {
     static template() { return "<template></template>" }

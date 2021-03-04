@@ -2,8 +2,19 @@ import { logger } from "./logger.js";
 let subLogger = logger.sub("definition");
 
 export default class WebComponent extends HTMLElement {
+    createObject(attributes) {
+        return new WebComponent();
+    }
+
+    getData() {}
+
+    onLoaded() {}
+
+    updateField(name, value) {}
+
     constructor() {
         super()
+        this.data = {};
         this.attachShadow({mode: 'open'});
         this.logger = subLogger.sub(this.localName);
         this.logger.info(`Constructed.`)

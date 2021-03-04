@@ -2,7 +2,7 @@ import WASMWebComponent from "./wasm.js"
 
 export default class WASMWebComponentLoader {
     constructor(logger) {
-        this.logger = logger.sub("javascript");
+        this.logger = logger.sub("wasm");
         this.logger.info("Loader constructed.");
     }
 
