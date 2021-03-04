@@ -1,17 +1,9 @@
 import "./web-component/vue.js"
 
-export { default as WebComponent } from "./web-component/base.js"
 export { default as WebComponentLoader } from "./web-component/loader.js"
+import ImportWebComponent from "./web-component/import.js"
+import WebComponent from "./web-component/web-component.js"
 
-export default class WebComponent {
-    constructor(attributes) {
-        this.data = {}
-    }
+WebComponent.Import = ImportWebComponent;
 
-    static async template() {
-        return null;
-    }
-
-    onLoaded(shadowRoot) {
-    }
-}
+export default WebComponent;

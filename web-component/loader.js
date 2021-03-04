@@ -69,5 +69,5 @@ export default class WebComponentLoader extends HTMLElement {
 }
 
 // Define the new element
-customElements.define('web-component', WebComponentLoader);
-subLogger.info("<web-component> element registered.");
+//customElements.define('web-component', WebComponentLoader);
+//subLogger.info("<web-component> element registered.");
