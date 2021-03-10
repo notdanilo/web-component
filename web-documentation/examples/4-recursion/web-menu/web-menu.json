@@ -1,0 +1,44 @@
+{
+  "menu": {
+    "name": "Navigation",
+    "link": "/",
+    "items": [
+      {
+        "name": "Company",
+        "link": "company",
+        "items": [
+          { "name": "Overview", "link": "" },
+          { "name": "Mission", "link": "mission" },
+          { "name": "News", "link": "news" }
+        ]
+      },
+      {
+        "name": "Products",
+        "link": "products",
+        "items": [
+          { "name": "Overview", "link": "" },
+          { "name": "Simulation", "link": "simulation" },
+          { "name": "Home Automation", "link": "home-automation" }
+        ]
+      },
+      {
+        "name": "Careers",
+        "link": "careers",
+        "items": [
+          { "name": "Overview", "link": "" },
+          { "name": "Team", "link": "team" },
+          { "name": "Jobs", "link": "jobs" }
+        ]
+      },
+      {
+        "name": "Media",
+        "link": "media",
+        "items": [
+          { "name": "Overview", "link": "" },
+          { "name": "Instagram", "link": "https://instagram.com/sensorial.systems" },
+          { "name": "YouTube", "link": "https://youtube.com/user/sensorial.systems" }
+        ]
+      }
+    ]
+  }
+}

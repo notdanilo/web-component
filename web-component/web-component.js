@@ -33,6 +33,12 @@ export default class WebComponent extends HTMLElement {
 
     async #createBindings() {
         let data = await this.getData();
+        let attributes = this.shadowRoot.host.attributes;
+        data["attributes"] = {};
+        for (var i = 0; i < attributes.length; i++) {
+            let attribute = attributes[i];
+            data["attributes"][attribute.name] = attribute.value;
+        }
         let el = this.shadowRoot.getElementById("vue");
 
         // We need to remove style elements from the template because Vue doesn't

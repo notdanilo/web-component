@@ -1,0 +1,17 @@
+<template>
+    <style>
+        .ident {
+            margin-left: 20px;
+        }
+    </style>
+    <!-- Workaround to store the parsed attribute -->
+    <div v-if="json = attributes.menu && JSON.parse(attributes.menu)">
+        <a :href="json.link">{{ json.name }}</a>
+        <div class="ident">
+            <web-menu v-for="item in json.items" :menu="JSON.stringify(item)"></web-menu>
+        </div>
+    </div>
+    <div v-else>
+        <web-menu :menu="JSON.stringify(menu)"></web-menu>
+    </div>
+</template>
