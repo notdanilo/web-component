@@ -1,6 +1,5 @@
 import "./web-component/vue.js"
 
-export { default as WebComponentLoader } from "./web-component/loader.js"
 import ImportWebComponent from "./web-component/import.js"
 import WebComponent from "./web-component/web-component.js"
 

@@ -1,38 +1,69 @@
-import Path             from "./loader/path.js"
-import JavaScriptLoader from "./loader/javascript.js"
-import TemplateLoader   from "./loader/template.js"
-import WASMLoader       from "./loader/wasm.js"
+import Path   from "./loader/path.js"
+import Loader from "./loader/multi-loader.js"
 
 class Importer {
     constructor() {
-        this.javascript = new JavaScriptLoader();
-        this.wasm       = new WASMLoader();
-        this.template   = new TemplateLoader();
+        this.loader = new Loader();
     }
 
-    async #importModule(path) {
-        let module = {};
+    async #importModule(manifest, data, template) {
+        let modulePath = `${manifest.path.getResolvedPath()}/${manifest.module}`;
+        let module = { manifest, data, template };
         try {
-            module.instance = await import(path.getResolvedPath() + ".js");
-            module.found    = true;
-            if (module.instance["web_component_target_wasm"] || module.instance.default.name == "init") {
-                module.type = "WASM";
-            } else module.type = "JAVASCRIPT";
+            module.instance = await import(modulePath);
         } catch(e) {
             console.error(`[web-component] ${e}`);
-            module.type = "TEMPLATE";
-            module.found = false;
         }
-        module.path = path;
-        return module;
+        await this.loader.load(module, data, template);
+    }
+
+    async #importManifest(path) {
+        let name = path.getName();
+        let manifestPath = `${path}/manifest.json`;
+        let manifest = {
+            name,
+            module: `${name}.js`,
+            template: `${name}.html`,
+            data: `${name}.json`
+        };
+        let loadedManifest = await fetch(manifestPath);
+
+        // Overwrite the manifest's properties with the loaded ones.
+        if (loadedManifest.ok) {
+            loadedManifest = await loadedManifest.json();
+            for (let property in loadedManifest) {
+                manifest[property] = loadedManifest[property];
+            }
+        }
+
+        // These properties won't be overwritten by the loadedManifest.
+        manifest.path = path;
+        return manifest;
+    }
+
+    async #importData(manifest) {
+        let dataPath = `${manifest.path}/${manifest.data}`;
+        let data = await fetch(dataPath);
+        if (data.ok) {
+            return await data.json();
+        } else return {};
+    }
+
+    async #importTemplate(manifest) {
+        let templatePath = `${manifest.path}/${manifest.template}`;
+        let template = await fetch(templatePath);
+        if (template.ok)
+            return await template.text();
+        else
+            return "<template></template>";
     }
 
     async import(path) {
         path = new Path(path);
-        let module = await this.#importModule(path);
-             if (module.type == "JAVASCRIPT") this.javascript.load(module);
-        else if (module.type == "WASM")       this.wasm.load(module);
-        else if (module.type == "TEMPLATE")   this.template.load(module);
+        let manifest = await this.#importManifest(path);
+        let data = await this.#importData(manifest);
+        let template = await this.#importTemplate(manifest);
+        let module = await this.#importModule(manifest, data, template);
     }
 }
 

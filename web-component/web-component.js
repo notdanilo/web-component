@@ -1,16 +1,17 @@
 export default class WebComponent extends HTMLElement {
     constructor() {
         super();
+        // Inefficient method for deep-cloning.
+        this.data = JSON.parse(JSON.stringify(this.component.DATA));
         this.attachShadow({mode: 'open'});
     }
 
     async getData() {
-        return {};
+        return this.data;
     }
 
-    async template() {
-        var response = await fetch(this.component.path + ".html");
-        return response.text();
+    async getTemplate() {
+        return this.component.TEMPLATE;
     }
 
     async onload() {}
@@ -22,7 +23,7 @@ export default class WebComponent extends HTMLElement {
     }
 
     async #createTemplate() {
-        let content  = await this.template();
+        let content  = await this.getTemplate();
         let template = this.#createTemplateFromString(content);
         let node     = this.#createNodeFromTemplate(template);
         this.shadowRoot.appendChild(node);
