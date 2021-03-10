@@ -17,7 +17,7 @@ export default class WASMWebComponent extends WebComponent {
         return method;
     }
 
-    async template() {
+    async getTemplate() {
         return this.ffi_template();
     }
 
@@ -26,9 +26,10 @@ export default class WASMWebComponent extends WebComponent {
     }
 
     getData() {
-        let json = "{}";
-        if (this.ffi_get_data) json = this.ffi_get_data(this.object);
-        return JSON.parse(json);
+        if (this.ffi_get_data) {
+            this.data = JSON.parse(this.ffi_get_data(this.object));
+        }
+        return this.data
     }
 
     onload() {
