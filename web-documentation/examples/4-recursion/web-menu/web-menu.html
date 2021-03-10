@@ -4,14 +4,17 @@
             margin-left: 20px;
         }
     </style>
-    <!-- Workaround to store the parsed attribute -->
-    <div v-if="json = attributes.menu && JSON.parse(attributes.menu)">
-        <a :href="json.link">{{ json.name }}</a>
+    <!-- Workaround to store the parsed attribute
+     !-- Check this: https://vuejsdevelopers.com/2017/10/23/vue-js-tree-menu-recursive-components/
+     !-- It seems lke there is a way to pass objects to props.
+     !-->
+    <div v-if="attributes.menu">
+        <a :href="attributes.menu.link">{{ attributes.menu.name }}</a>
         <div class="ident">
-            <web-menu v-for="item in json.items" :menu="JSON.stringify(item)"></web-menu>
+            <web-menu v-for="item in attribute.menu.items" :menu="item"></web-menu>
         </div>
     </div>
     <div v-else>
-        <web-menu :menu="JSON.stringify(menu)"></web-menu>
+        <web-menu :menu="menu"></web-menu>
     </div>
 </template>
