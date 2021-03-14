@@ -1,13 +1,12 @@
 export default class WebComponent extends HTMLElement {
     constructor() {
         super();
-        // Inefficient method for deep-cloning.
-        this.data = JSON.parse(JSON.stringify(this.component.DATA));
         this.attachShadow({mode: 'open'});
     }
 
     async getData() {
-        return this.data;
+        // Inefficient method for deep-cloning.
+        return JSON.parse(JSON.stringify(this.component.DATA));
     }
 
     async getTemplate() {
@@ -32,12 +31,12 @@ export default class WebComponent extends HTMLElement {
     // Bindings
 
     async #createBindings() {
-        let data = await this.getData();
+        this.data = await this.getData();
         let attributes = this.shadowRoot.host.attributes;
-        data["attributes"] = {};
+        this.data["attributes"] = {};
         for (var i = 0; i < attributes.length; i++) {
             let attribute = attributes[i];
-            data["attributes"][attribute.name] = attribute.value;
+            this.data["attributes"][attribute.name] = attribute.value;
         }
         let el = this.shadowRoot.getElementById("vue");
 
@@ -67,6 +66,7 @@ export default class WebComponent extends HTMLElement {
 
         // Watch changes.
         let watch = {};
+        let data = this.data;
         this.vue = new Vue({el,data,watch});
         this.vue.web_component = this;
 
