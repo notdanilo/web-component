@@ -1,0 +1,40 @@
+{
+  "menu": {
+    "name": "",
+    "link": "",
+    "items": [
+      {
+        "name": "Company",
+        "link": "company",
+        "items": [
+          { "name": "Mission", "link": "mission" },
+          { "name": "News", "link": "news" }
+        ]
+      },
+      {
+        "name": "Products",
+        "link": "products",
+        "items": [
+          { "name": "Simulation", "link": "products/simulation" },
+          { "name": "Home Automation", "link": "products/home-automation" }
+        ]
+      },
+      {
+        "name": "Careers",
+        "link": "careers",
+        "items": [
+          { "name": "Team", "link": "careers/team" },
+          { "name": "Jobs", "link": "careers/jobs" }
+        ]
+      },
+      {
+        "name": "Media",
+        "link": "media",
+        "items": [
+          { "name": "Instagram", "link": "https://instagram.com/" },
+          { "name": "YouTube", "link": "https://youtube.com/" }
+        ]
+      }
+    ]
+  }
+}

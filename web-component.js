@@ -1,4 +1,8 @@
-import "./vue.js"
+import "./web-component/vue.js"
 
-export { default as WebComponent } from "./web-component-definition.js"
-export { default as WebComponentLoader } from "./web-component-loader.js"
+import ImportWebComponent from "./web-component/import.js"
+import WebComponent from "./web-component/web-component.js"
+
+WebComponent.Import = ImportWebComponent;
+
+export default WebComponent;

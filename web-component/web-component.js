@@ -1,32 +1,43 @@
 export default class WebComponent extends HTMLElement {
     constructor() {
-        super()
+        super();
         this.attachShadow({mode: 'open'});
     }
 
-    getTemplate() {
-        return this.template;
+    async getData() {
+        // Inefficient method for deep-cloning.
+        return JSON.parse(JSON.stringify(this.component.DATA));
     }
 
-    createNodeFromTemplate(template) {
-        let node = document.importNode(template.content, true);
-        let div  = document.createElement("div");
-        div.setAttribute("id", "vue");
-        div.appendChild(node);
-        return div;
+    async getTemplate() {
+        return this.component.TEMPLATE;
     }
+
+    async onload() {}
 
     async connectedCallback() {
-        this.object  = this.createObject(this.shadowRoot.host.attributes);
-        let data     = this.getData();
-        let template = this.getTemplate();
-        let node     = this.createNodeFromTemplate(template);
-        this.shadowRoot.appendChild(node);
-        this.createBindings(data);
-        this.onLoaded(this.shadowRoot);
+        await this.#createTemplate();
+        await this.#createBindings();
+        this.onload(this.shadowRoot);
     }
 
-    createBindings(data) {
+    async #createTemplate() {
+        let content  = await this.getTemplate();
+        let template = this.#createTemplateFromString(content);
+        let node     = this.#createNodeFromTemplate(template);
+        this.shadowRoot.appendChild(node);
+    }
+
+    // Bindings
+
+    async #createBindings() {
+        this.data = await this.getData();
+        let attributes = this.shadowRoot.host.attributes;
+        this.data["attributes"] = {};
+        for (var i = 0; i < attributes.length; i++) {
+            let attribute = attributes[i];
+            this.data["attributes"][attribute.name] = attribute.value;
+        }
         let el = this.shadowRoot.getElementById("vue");
 
         // We need to remove style elements from the template because Vue doesn't
@@ -55,14 +66,7 @@ export default class WebComponent extends HTMLElement {
 
         // Watch changes.
         let watch = {};
-        for (var name in data) {
-            watch[name] = (function(name) {
-                return function(new_val,_) {
-                    let data = JSON.stringify(new_val);
-                    this.web_component.updateField(name, data);
-                }
-            })(name)
-        }
+        let data = this.data;
         this.vue = new Vue({el,data,watch});
         this.vue.web_component = this;
 
@@ -76,5 +80,20 @@ export default class WebComponent extends HTMLElement {
             let slot = slots[i];
             this.shadowRoot.getElementById(slot.id).replaceWith(slot.elem)
         }
+    }
+
+    // Template creation.
+    #createTemplateFromString(string) {
+        let innerDiv       = document.createElement("div");
+        innerDiv.innerHTML = string;
+        return innerDiv.firstChild;
+    }
+
+    #createNodeFromTemplate(template) {
+        let node = document.importNode(template.content, true);
+        let div  = document.createElement("div");
+        div.setAttribute("id", "vue");
+        div.appendChild(node);
+        return div;
     }
 }

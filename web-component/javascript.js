@@ -1,8 +1,6 @@
-import WebComponent from "./web-component-definition.js"
+import WebComponent from "./base.js"
 
-export default class WebComponentJavaScript extends WebComponent {
-    static template() { return "<template></template>" }
-
+export default class JavaScriptWebComponent extends WebComponent {
     createObject(attributes) {
         return new this.class(attributes);
     }

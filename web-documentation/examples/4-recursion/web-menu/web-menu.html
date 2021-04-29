@@ -1,0 +1,13 @@
+<template>
+    <style>
+        .ident {
+            margin-left: 20px;
+        }
+    </style>
+    <div>
+        <a :href="menu.link">{{ menu.name }}</a>
+        <div class="ident">
+            <web-menu v-for="item in menu.items" :menu="JSON.stringify(item)"></web-menu>
+        </div>
+    </div>
+</template>
