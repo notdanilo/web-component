@@ -30,15 +30,44 @@ export default class WebComponent extends HTMLElement {
 
     // Bindings
 
-    async #createBindings() {
-        this.data = await this.getData();
+    static ATTRIBUTE_PREFIX = "component-bind:";
+
+    parentComponent() {
+        return this.shadowRoot.host.getRootNode().host;
+    }
+
+    getValue(data, index) {
+        let split = index.split(".");
+        for (let i = 0; i < split.length; i++) {
+            data = data[split[i]];
+        }
+        return data;
+    }
+
+    async #createAttributesBindings() {
         let attributes = this.shadowRoot.host.attributes;
         this.data["attributes"] = {};
         for (var i = 0; i < attributes.length; i++) {
             let attribute = attributes[i];
             this.data["attributes"][attribute.name] = attribute.value;
+            if (attribute.name.indexOf(WebComponent.ATTRIBUTE_PREFIX) == 0) {
+                let name = attribute.name.substring(WebComponent.ATTRIBUTE_PREFIX.length);
+                let value = attribute.value;
+                let parent = this.parentComponent();
+                console.log(parent.data);
+                this.data[name] = this.getValue(parent.data, value);
+            }
         }
+    }
+
+    async #createTemplateBindings() {
+        // TODO
+    }
+
+    async #createBindings() {
+        this.data = await this.getData();
         let el = this.shadowRoot.getElementById("vue");
+        await this.#createAttributesBindings();
 
         // We need to remove style elements from the template because Vue doesn't
         // compile it.

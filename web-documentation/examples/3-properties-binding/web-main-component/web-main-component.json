@@ -1,0 +1,17 @@
+{
+  "data": "This is the main data.",
+  "subData1": {
+    "data": "This is the sub-data",
+    "otherData": "This is another sub-data"
+  },
+  "subData2": {
+    "data": "This is the sub-data 2",
+    "otherData": "This is another sub-data 2"
+  },
+  "sub": {
+    "data": {
+      "data": "This is the sub-data 3",
+      "otherData": "This is another sub-data 3"
+    }
+  }
+}

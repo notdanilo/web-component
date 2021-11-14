@@ -1,0 +1,8 @@
+<template>
+  Main data: {{ data }}
+  <web-sub-component component-bind:source="subData1"></web-sub-component>
+  <div>
+    <web-sub-component component-bind:source="subData2"></web-sub-component>
+    <web-sub-component component-bind:source="sub.data"></web-sub-component>
+  </div>
+</template>
