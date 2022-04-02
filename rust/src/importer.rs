@@ -5,9 +5,26 @@ use crate::WebComponent;
 
 pub struct Importer;
 
-#[wasm_bindgen(module = "/js/importer.js")]
-extern "C" {
-    fn import_wc(path: String);
+mod js {
+    use wasm_bindgen::prelude::*;
+    #[wasm_bindgen(module = "/js/importer.js")]
+    extern "C" {
+        #[wasm_bindgen(js_name = Import)]
+        pub fn import(path: String);
+
+        #[wasm_bindgen(js_name = LoadAll)]
+        pub fn load_all(module: JsValue);
+    }
+}
+
+#[wasm_bindgen(js_name = Import)]
+pub fn import(path: String) {
+    js::import(path);
+}
+
+#[wasm_bindgen(js_name = LoadAll)]
+pub fn load_all(module: JsValue) {
+    js::load_all(module);
 }
 
 impl WebComponent for Importer {
@@ -18,7 +35,7 @@ impl WebComponent for Importer {
     fn attribute_changed(&mut self, name: String, _: Option<String>, new: Option<String>) {
         match (name.as_str(), new.as_ref()) {
             ("path", Some(new)) => {
-                import_wc(new.clone())
+                import(new.clone())
             },
             _ => ()
         }

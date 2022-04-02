@@ -32,7 +32,7 @@ function Load(module, name) {
     customElements.define(name, WebComponent);
 }
 
-function LoadAll(module) {
+export function LoadAll(module) {
     for (let key in module) {
         if (key.endsWith("_constructor")) {
             let name = key.substring(0, key.length - "_constructor".length).replaceAll("_", "-");
@@ -41,8 +41,7 @@ function LoadAll(module) {
     }
 }
 
-
-export function import_wc(path) {
+export function Import(path) {
     let module = import(path);
     module.then(module => {
         module

@@ -2,7 +2,11 @@
 <html>
     <head>
         <title>web-component</title>
-        <script type="module" src="/rust/pkg/web_component.js"></script>
+        <script type="module">
+            import * as WebComponent from "/rust/pkg/web_component.js";
+            await WebComponent.default();
+            WebComponent.LoadAll(WebComponent);
+        </script>
     </head>
     <body>
         This is a test.

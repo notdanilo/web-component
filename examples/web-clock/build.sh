@@ -1,1 +1,1 @@
-wasm-pack build --release --target web --no-typescript
+wasm-pack build --release --target web --no-typescript --out-dir web-clock
