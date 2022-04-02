@@ -1,12 +1,10 @@
-use wasm_bindgen::prelude::*;
-use wasm_bindgen::{JsCast, JsValue};
+use wasm_bindgen::JsCast;
 
 use web_sys::{HtmlElement, ShadowRootMode, ShadowRootInit, window, HtmlTemplateElement};
-use web_component::{WebComponent, Identity};
-use web_component::registry::REGISTRY;
+use web_component::WebComponent;
 
 pub struct Clock {
-    element: HtmlElement
+    pub element: HtmlElement
 }
 
 impl WebComponent for Clock {
@@ -37,17 +35,4 @@ impl WebComponent for Clock {
     }
 }
 
-#[wasm_bindgen]
-pub fn web_clock_constructor(element: HtmlElement) -> Identity {
-    unsafe {
-        REGISTRY.register_object(Box::new(Clock::new(element)))
-    }
-}
-
-#[wasm_bindgen]
-pub fn web_clock_observed_attributes() -> Vec<JsValue> {
-    Clock::observed_attributes()
-        .into_iter()
-        .map(|value| value.into())
-        .collect()
-}
+web_component::define!(Clock, web_clock);

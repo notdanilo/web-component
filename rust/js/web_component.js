@@ -33,7 +33,6 @@ function Load(module, name) {
             return module[observed_attributes]();
         }
     }
-
     customElements.define(name, WebComponent);
 }
 
@@ -47,7 +46,6 @@ function LoadAll(module) {
 }
 
 export function import_wc(path) {
-    console.log(path);
     let module = import(path);
     module.then(module => {
         module

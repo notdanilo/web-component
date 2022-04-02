@@ -1,13 +1,9 @@
 use wasm_bindgen::prelude::*;
-use wasm_bindgen::{JsCast, JsValue};
 
-use web_sys::{HtmlElement, ShadowRootMode, ShadowRootInit, window, HtmlTemplateElement};
-use crate::{WebComponent, Identity};
-use crate::registry::REGISTRY;
+use web_sys::HtmlElement;
+use crate::WebComponent;
 
-pub struct Importer {
-    element: HtmlElement
-}
+pub struct Importer;
 
 #[wasm_bindgen(module = "/js/importer.js")]
 extern "C" {
@@ -15,8 +11,8 @@ extern "C" {
 }
 
 impl WebComponent for Importer {
-    fn new(element: HtmlElement) -> Self {
-        Self {element}
+    fn new(_element: HtmlElement) -> Self {
+        Self
     }
 
     fn attribute_changed(&mut self, name: String, _: Option<String>, new: Option<String>) {
@@ -33,17 +29,4 @@ impl WebComponent for Importer {
     }
 }
 
-#[wasm_bindgen]
-pub fn web_component_constructor(element: HtmlElement) -> Identity {
-    unsafe {
-        REGISTRY.register_object(Box::new(Importer::new(element)))
-    }
-}
-
-#[wasm_bindgen]
-pub fn web_component_observed_attributes() -> Vec<JsValue> {
-    Importer::observed_attributes()
-        .into_iter()
-        .map(|value| value.into())
-        .collect()
-}
+crate::define!(Importer, web_component);
