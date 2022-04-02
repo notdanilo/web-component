@@ -1,8 +1,3 @@
-import * as module from "./web_component_interface.js"
-await module.default()
-
-// FIXME: Functions duplicated in importer.js
-
 function Load(module, name) {
     let exported_name       = name.replaceAll("-", "_");
     let constructor_        = exported_name + "_constructor";
@@ -46,8 +41,8 @@ function LoadAll(module) {
     }
 }
 
+
 export function import_wc(path) {
-    console.log(path);
     let module = import(path);
     module.then(module => {
         module
@@ -55,7 +50,3 @@ export function import_wc(path) {
             .then(initialized => LoadAll(module));
     })
 }
-
-LoadAll(module);
-export default class WebComponent {}
-WebComponent.Import = import_wc;

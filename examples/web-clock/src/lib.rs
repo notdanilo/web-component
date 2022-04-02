@@ -2,8 +2,8 @@ use wasm_bindgen::prelude::*;
 use wasm_bindgen::{JsCast, JsValue};
 
 use web_sys::{HtmlElement, ShadowRootMode, ShadowRootInit, window, HtmlTemplateElement};
-use crate::{WebComponent, Identity};
-use crate::interface::registry::REGISTRY;
+use web_component::{WebComponent, Identity};
+use web_component::registry::REGISTRY;
 
 pub struct Clock {
     element: HtmlElement
