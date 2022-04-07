@@ -6,29 +6,29 @@ use crate::web_component::Identity;
 use crate::interface::registry::REGISTRY;
 
 #[wasm_bindgen]
-pub fn connected(identity: Identity) {
+pub async fn connected(identity: Identity) {
     unsafe {
-        REGISTRY.object(identity).connected()
+        REGISTRY.object(identity).connected().await
     }
 }
 
 #[wasm_bindgen]
-pub fn disconnected(identity: Identity) {
+pub async fn disconnected(identity: Identity) {
     unsafe {
-        REGISTRY.object(identity).disconnected()
+        REGISTRY.object(identity).disconnected().await
     }
 }
 
 #[wasm_bindgen]
-pub fn adopted(identity: Identity) {
+pub async fn adopted(identity: Identity) {
     unsafe {
-        REGISTRY.object(identity).adopted()
+        REGISTRY.object(identity).adopted().await
     }
 }
 
 #[wasm_bindgen]
-pub fn attribute_changed(identity: Identity, name: String, old_value: Option<String>, new_value: Option<String>) {
+pub async fn attribute_changed(identity: Identity, name: String, old_value: Option<String>, new_value: Option<String>) {
     unsafe {
-        REGISTRY.object(identity).attribute_changed(name, old_value, new_value)
+        REGISTRY.object(identity).attribute_changed(name, old_value, new_value).await
     }
 }

@@ -11,5 +11,7 @@ importer = []
 
 [dependencies]
 wasm-bindgen = "0.2"
+wasm-bindgen-futures = "0.4"
+async-trait = "0.1"
 web-sys = { version = "0.3", features = ["console", "Window", "Document", "Node", "Element", "HtmlElement", "HtmlTemplateElement", "ShadowRoot", "ShadowRootInit", "ShadowRootMode"] }
 concat-idents = "1.1.3"

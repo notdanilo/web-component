@@ -1,4 +1,5 @@
 use wasm_bindgen::prelude::*;
+use async_trait::async_trait;
 
 use web_sys::HtmlElement;
 use crate::WebComponent;
@@ -27,12 +28,13 @@ pub fn load_all(module: JsValue) {
     js::load_all(module);
 }
 
+#[async_trait(?Send)]
 impl WebComponent for Importer {
     fn new(_element: HtmlElement) -> Self {
         Self
     }
 
-    fn attribute_changed(&mut self, name: String, _: Option<String>, new: Option<String>) {
+    async fn attribute_changed(&mut self, name: String, _: Option<String>, new: Option<String>) {
         match (name.as_str(), new.as_ref()) {
             ("path", Some(new)) => {
                 import(new.clone())

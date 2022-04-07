@@ -8,20 +8,20 @@ function Load(module, name) {
             self.identity = module[constructor_](this);
         }
 
-        connectedCallback() {
-            module.connected(self.identity);
+        async connectedCallback() {
+            await module.connected(self.identity);
         }
 
-        disconnectedCallback() {
-            module.disconnected(self.identity);
+        async disconnectedCallback() {
+            await module.disconnected(self.identity);
         }
 
-        adoptedCallback() {
-            module.adopted(self.identity);
+        async adoptedCallback() {
+            await module.adopted(self.identity);
         }
 
-        attributeChangedCallback(name, oldValue, newValue) {
-            module.attribute_changed(self.identity, name, oldValue, newValue);
+        async attributeChangedCallback(name, oldValue, newValue) {
+            await module.attribute_changed(self.identity, name, oldValue, newValue);
         }
 
         static get observedAttributes() {
