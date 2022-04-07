@@ -13,12 +13,24 @@ impl WebComponent for Clock {
         Self {element}
     }
 
+    // TODO: Gotta make this async.
     fn connected(&mut self) {
         if let Some(shadow_root) = self.element.shadow_root() {
-            let document = window()
-                .and_then(|window| window.document())
-                .unwrap();
+            let window = window().unwrap();
+            let document = window.document().unwrap();
             let template = document.create_element("div").unwrap();
+            let promise = window.fetch_with_str("index.html");
+            wasm_bindgen_futures::spawn_local(async {
+                let future = wasm_bindgen_futures::JsFuture::from(promise);
+                let content = future.await.unwrap();
+                let response = content.dyn_into::<web_sys::Response>().unwrap();
+                wasm_bindgen_futures::spawn_local(async move {
+                    let promise = response.text().unwrap();
+                    let future = wasm_bindgen_futures::JsFuture::from(promise);
+                    let text = future.await.unwrap().as_string().unwrap();
+                    web_sys::console::log_1(&format!("{:?}", text).into());
+                });
+            });
             template.set_inner_html("<template>Eita</template>");
             let template = template.first_child().unwrap().dyn_into::<HtmlTemplateElement>().unwrap();
             let node = document.import_node_with_deep(&template.content(), true).unwrap();

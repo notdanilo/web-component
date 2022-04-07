@@ -5,11 +5,6 @@ use wasm_bindgen::prelude::*;
 use crate::web_component::Identity;
 use crate::interface::registry::REGISTRY;
 
-#[wasm_bindgen(module = "/js/importer.js")]
-extern "C" {
-    fn get_current_module() -> JsValue;
-}
-
 #[wasm_bindgen]
 pub fn connected(identity: Identity) {
     unsafe {

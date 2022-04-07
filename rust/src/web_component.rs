@@ -1,5 +1,4 @@
 use web_sys::HtmlElement;
-
 pub trait WebComponent {
     fn new(element: HtmlElement) -> Self where Self: Sized;
 
