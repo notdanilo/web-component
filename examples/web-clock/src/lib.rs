@@ -16,12 +16,12 @@ impl WebComponent for Clock {
         Self {element}
     }
 
-    // TODO: Gotta make this async.
     async fn connected(&mut self) {
         if let Some(shadow_root) = self.element.shadow_root() {
             let window = window().unwrap();
             let document = window.document().unwrap();
             let template = document.create_element("div").unwrap();
+            // TODO: Move these to methods path(&self) and name(&self)
             let path = js_sys::Reflect::get(&self.element, &"path".into()).unwrap().as_string().unwrap();
             let name = js_sys::Reflect::get(&self.element, &"name".into()).unwrap().as_string().unwrap();
             let index_path = format!("{}{}.html", path, name);
