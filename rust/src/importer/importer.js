@@ -1,10 +1,12 @@
-function Load(module, name) {
+function Load(module, name, path) {
     let exported_name       = name.replaceAll("-", "_");
     let constructor_        = exported_name + "_constructor";
     let observed_attributes = exported_name + "_observed_attributes";
     class WebComponent extends HTMLElement {
         constructor() {
             super();
+            this.path = path;
+            this.name = name;
             self.identity = module[constructor_](this);
         }
 
@@ -32,11 +34,12 @@ function Load(module, name) {
     customElements.define(name, WebComponent);
 }
 
-export function LoadAll(module) {
+export function LoadAll(module, path) {
     for (let key in module) {
         if (key.endsWith("_constructor")) {
             let name = key.substring(0, key.length - "_constructor".length).replaceAll("_", "-");
-            Load(module, name);
+            if (path) path = path.substring(0, path.length - name.length - 3); // remove "name.js"
+            Load(module, name, path);
         }
     }
 }
@@ -46,6 +49,6 @@ export function Import(path) {
     module.then(module => {
         module
             .default()
-            .then(initialized => LoadAll(module));
+            .then(initialized => LoadAll(module, path));
     })
 }
