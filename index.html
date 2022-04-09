@@ -2,10 +2,16 @@
 <html>
     <head>
         <title>web-component</title>
-        <script type="module" src="web-component.js"></script>
+        <script type="module">
+            import * as WebComponent from "/rust/pkg/web-component.js";
+            await WebComponent.default();
+            WebComponent.LoadAll(WebComponent);
+        </script>
     </head>
     <body>
-        <web-component path="web-documentation"></web-component>
-        <web-documentation></web-documentation>
+        This is a test.
+        <web-clock></web-clock>
+        <web-clock></web-clock>
+        <web-component path="/examples/web-clock/web-clock/web-clock.js"></web-component>
     </body>
 </html>
