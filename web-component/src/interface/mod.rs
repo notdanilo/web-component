@@ -2,7 +2,7 @@ pub mod registry;
 
 use wasm_bindgen::prelude::*;
 
-use crate::web_component::Identity;
+use crate::custom_element::Identity;
 use crate::interface::registry::REGISTRY;
 
 #[wasm_bindgen]

@@ -1,11 +1,11 @@
 pub mod prelude;
-mod web_component;
+mod custom_element;
 mod interface;
 mod macros;
 
 #[cfg(feature = "importer")]
 mod importer;
 
-pub use web_component::*;
+pub use custom_element::*;
 pub use interface::*;
 pub use macros::*;

@@ -3,7 +3,7 @@ macro_rules! define {
     ($component:ident, $name:ident) => {
         mod wasm_interface {
             use $crate::prelude::*;
-            use $crate::{WebComponent, Identity};
+            use $crate::{CustomElement, Identity};
             use $crate::registry::REGISTRY;
             use super::$component;
 

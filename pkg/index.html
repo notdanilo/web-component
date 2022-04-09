@@ -3,15 +3,15 @@
     <head>
         <title>web-component</title>
         <script type="module">
-            import * as WebComponent from "/rust/pkg/web-component.js";
+            import * as WebComponent from "/web-component/web-component.js";
             await WebComponent.default();
             WebComponent.LoadAll(WebComponent);
         </script>
     </head>
     <body>
         This is a test.
-        <web-clock></web-clock>
-        <web-clock></web-clock>
-        <web-component path="/examples/web-clock/web-clock/web-clock.js"></web-component>
+        <web-component path="/clocks"></web-component>
+        <analog-clock></analog-clock>
+        <digital-clock></digital-clock>
     </body>
 </html>

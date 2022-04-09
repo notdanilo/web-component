@@ -1,5 +1,5 @@
 [workspace]
 members = [
-	"rust",
-	"examples/web-clock"
+	"web-component",
+    "examples/clocks"
 ]

@@ -1,4 +1,4 @@
-use crate::{WebComponent, Identity};
+use crate::{CustomElement, Identity};
 
 pub struct Registry<T> {
     register : Vec<T>
@@ -15,6 +15,6 @@ impl<T> Registry<T> {
     }
 }
 
-pub static mut REGISTRY: Registry<Box<dyn WebComponent>> = Registry {
+pub static mut REGISTRY: Registry<Box<dyn CustomElement>> = Registry {
     register : Vec::new()
 };

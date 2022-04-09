@@ -34,18 +34,19 @@ function Load(module, name, path) {
     customElements.define(name, WebComponent);
 }
 
-export function LoadAll(module, path) {
+export function LoadAll(module, module_path) {
     for (let key in module) {
         if (key.endsWith("_constructor")) {
-            let name = key.substring(0, key.length - "_constructor".length).replaceAll("_", "-");
-            if (path) path = path.substring(0, path.length - name.length - 3); // remove "name.js"
-            Load(module, name, path);
+            let component_name = key.substring(0, key.length - "_constructor".length).replaceAll("_", "-");
+            let component_path = module_path + "/" + component_name;
+            Load(module, component_name, component_path);
         }
     }
 }
 
 export function Import(path) {
-    let module = import(path);
+    let name = path.substring(path.lastIndexOf("/") + 1);
+    let module = import(path + "/" + name + ".js");
     module.then(module => {
         module
             .default()

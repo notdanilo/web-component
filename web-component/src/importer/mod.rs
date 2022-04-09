@@ -2,9 +2,11 @@ use wasm_bindgen::prelude::*;
 use async_trait::async_trait;
 
 use web_sys::HtmlElement;
-use crate::WebComponent;
+use crate::CustomElement;
 
-pub struct Importer;
+pub struct Importer {
+    element: HtmlElement
+}
 
 mod js {
     use wasm_bindgen::prelude::*;
@@ -29,12 +31,16 @@ pub fn load_all(module: JsValue) {
 }
 
 #[async_trait(?Send)]
-impl WebComponent for Importer {
-    fn new(_element: HtmlElement) -> Self {
-        Self
+impl CustomElement for Importer {
+    fn new(element: HtmlElement) -> Self {
+        Self { element }
     }
 
-    async fn attribute_changed(&mut self, name: String, _: Option<String>, new: Option<String>) {
+    fn element(&'static self) -> &HtmlElement {
+        &self.element
+    }
+
+    async fn attribute_changed(&'static mut self, name: String, _: Option<String>, new: Option<String>) {
         match (name.as_str(), new.as_ref()) {
             ("path", Some(new)) => {
                 import(new.clone())
