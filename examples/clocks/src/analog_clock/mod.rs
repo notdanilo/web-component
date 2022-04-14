@@ -26,25 +26,6 @@ impl WebComponent for AnalogClock {
         &self.element
     }
 
-    async fn connected(&mut self) {
-        let canvas = self
-            .element
-            .shadow_root()
-            .unwrap()
-            .get_element_by_id("canvas")
-            .unwrap()
-            .dyn_into::<HtmlCanvasElement>()
-            .unwrap();
-        self.context = Some(canvas
-            .get_context("2d")
-            .unwrap()
-            .unwrap()
-            .dyn_into::<CanvasRenderingContext2d>()
-            .unwrap());
-        self.context.as_ref().unwrap().set_line_cap("round");
-        web_sys::console::log_1(&"Connected from Analog".into());
-    }
-
     fn draw_interval(&self) -> Option<f64> {
         Some(1.0)
     }
@@ -64,6 +45,25 @@ impl WebComponent for AnalogClock {
             context.restore();
         }
         true
+    }
+
+    async fn connected(&mut self) {
+        let canvas = self
+            .element
+            .shadow_root()
+            .unwrap()
+            .get_element_by_id("canvas")
+            .unwrap()
+            .dyn_into::<HtmlCanvasElement>()
+            .unwrap();
+        self.context = Some(canvas
+            .get_context("2d")
+            .unwrap()
+            .unwrap()
+            .dyn_into::<CanvasRenderingContext2d>()
+            .unwrap());
+        self.context.as_ref().unwrap().set_line_cap("round");
+        web_sys::console::log_1(&"Connected from Analog".into());
     }
 }
 
