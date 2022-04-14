@@ -6,7 +6,7 @@ use wasm_bindgen::prelude::*;
 use wasm_bindgen::JsCast;
 use async_trait::async_trait;
 use wasm_bindgen_futures::JsFuture;
-use web_sys::{HtmlElement, HtmlTemplateElement, window};
+use web_sys::{HtmlElement, HtmlTemplateElement, ShadowRootInit, ShadowRootMode, window};
 use crate::CustomElement;
 use metadata::Metadata;
 
@@ -70,6 +70,7 @@ impl<T: WebComponent> CustomElement for T {
     }
 
     async fn connected(&'static mut self) {
+        self.element().attach_shadow(&ShadowRootInit::new(ShadowRootMode::Open)).ok();
         let window = window().unwrap();
         if let Some(shadow_root) = self.element().shadow_root() {
             let document = window.document().unwrap();
@@ -105,15 +106,15 @@ impl<T: WebComponent> CustomElement for T {
         window.request_animation_frame(callback).unwrap();
     }
 
+    async fn disconnected(&'static mut self) {
+        web_sys::console::log_1(&"Disconnected from impl".into());
+        T::disconnected(self).await
+    }
+
     async fn adopted(&'static mut self) {
         T::adopted(self).await
     }
 
-    async fn disconnected(&'static mut self) {
-        web_sys::console::log_1(&"Disconnected from impl".into());
-        WebComponent::disconnected(self).await
-    }
-    
     async fn attribute_changed(&'static mut self, attribute_name: String, old_value: Option<String>, new_value: Option<String>) {
         T::attribute_changed(self, attribute_name, old_value, new_value).await
     }

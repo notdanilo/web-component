@@ -7,23 +7,23 @@ function Load(module, name, path) {
             super();
             this.path = path;
             this.name = name;
-            self.identity = module[constructor_](this);
+            this.identity = module[constructor_](this);
         }
 
         async connectedCallback() {
-            await module.connected(self.identity);
+            await module.connected(this.identity);
         }
 
         async disconnectedCallback() {
-            await module.disconnected(self.identity);
+            await module.disconnected(this.identity);
         }
 
         async adoptedCallback() {
-            await module.adopted(self.identity);
+            await module.adopted(this.identity);
         }
 
         async attributeChangedCallback(name, oldValue, newValue) {
-            await module.attribute_changed(self.identity, name, oldValue, newValue);
+            await module.attribute_changed(this.identity, name, oldValue, newValue);
         }
 
         static get observedAttributes() {

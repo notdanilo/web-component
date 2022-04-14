@@ -23,3 +23,4 @@ pub trait CustomElement {
 pub type Identity = usize;
 
 pub mod web_component;
+pub use web_component::WebComponent;

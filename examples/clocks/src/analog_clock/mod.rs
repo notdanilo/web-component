@@ -1,8 +1,14 @@
 use async_trait::async_trait;
 use wasm_bindgen::JsCast;
 
-use web_sys::{HtmlElement, ShadowRootMode, ShadowRootInit, CanvasRenderingContext2d, HtmlCanvasElement};
+use web_sys::{HtmlElement, CanvasRenderingContext2d, HtmlCanvasElement};
 use web_component::web_component::WebComponent;
+
+impl Drop for AnalogClock {
+    fn drop(&mut self) {
+        web_sys::console::log_1(&"AnalogClock dropped".into());
+    }
+}
 
 pub struct AnalogClock {
     pub element: HtmlElement,
@@ -12,7 +18,6 @@ pub struct AnalogClock {
 #[async_trait(?Send)]
 impl WebComponent for AnalogClock {
     fn new(element: HtmlElement) -> Self {
-        element.attach_shadow(&ShadowRootInit::new(ShadowRootMode::Open)).ok();
         let context = None;
         Self {element, context}
     }
@@ -37,10 +42,7 @@ impl WebComponent for AnalogClock {
             .dyn_into::<CanvasRenderingContext2d>()
             .unwrap());
         self.context.as_ref().unwrap().set_line_cap("round");
-    }
-
-    async fn disconnected(&mut self) {
-        web_sys::console::log_1(&"Disconnected from Analog".into());
+        web_sys::console::log_1(&"Connected from Analog".into());
     }
 
     fn draw_interval(&self) -> Option<f64> {

@@ -1,6 +1,12 @@
 use async_trait::async_trait;
-use web_sys::{HtmlElement, ShadowRootMode, ShadowRootInit};
+use web_sys::{HtmlElement};
 use web_component::web_component::WebComponent;
+
+impl Drop for DigitalClock {
+    fn drop(&mut self) {
+        web_sys::console::log_1(&"DigitalClock dropped".into());
+    }
+}
 
 pub struct DigitalClock {
     pub element: HtmlElement
@@ -9,7 +15,6 @@ pub struct DigitalClock {
 #[async_trait(?Send)]
 impl WebComponent for DigitalClock {
     fn new(element: HtmlElement) -> Self {
-        element.attach_shadow(&ShadowRootInit::new(ShadowRootMode::Open)).ok();
         Self {element}
     }
 
