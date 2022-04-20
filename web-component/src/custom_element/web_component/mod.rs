@@ -34,9 +34,7 @@ pub trait WebComponent {
 
     async fn connected(&mut self) {}
 
-    async fn disconnected(&mut self) {
-        web_sys::console::log_1(&"Disconnected from default impl".into());
-    }
+    async fn disconnected(&mut self) {}
 
     async fn adopted(&mut self) {}
 
@@ -107,7 +105,6 @@ impl<T: WebComponent> CustomElement for T {
     }
 
     async fn disconnected(&'static mut self) {
-        web_sys::console::log_1(&"Disconnected from impl".into());
         T::disconnected(self).await
     }
 

@@ -63,7 +63,6 @@ impl WebComponent for AnalogClock {
             .dyn_into::<CanvasRenderingContext2d>()
             .unwrap());
         self.context.as_ref().unwrap().set_line_cap("round");
-        web_sys::console::log_1(&"Connected from Analog".into());
     }
 }
 
