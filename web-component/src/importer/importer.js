@@ -1,4 +1,4 @@
-function Load(module, name, path) {
+export function CreateWebComponent(module, name, path) {
     let exported_name       = name.replaceAll("-", "_");
     let constructor_        = exported_name + "_constructor";
     let observed_attributes = exported_name + "_observed_attributes";
@@ -30,26 +30,14 @@ function Load(module, name, path) {
             return module[observed_attributes]();
         }
     }
-
-    customElements.define(name, WebComponent);
+    return WebComponent;
 }
 
-export function LoadAll(module, module_path) {
-    for (let key in module) {
-        if (key.endsWith("_constructor")) {
-            let component_name = key.substring(0, key.length - "_constructor".length).replaceAll("_", "-");
-            let component_path = module_path + "/" + component_name;
-            Load(module, component_name, component_path);
-        }
-    }
+export async function Import(path) {
+    try { return await import(path); }
+    catch(e) { return null; }
 }
 
-export function Import(path) {
-    let name = path.substring(path.lastIndexOf("/") + 1);
-    let module = import(path + "/" + name + ".js");
-    module.then(module => {
-        module
-            .default()
-            .then(initialized => LoadAll(module, path));
-    })
+export async function Initialize(module) {
+    await module.default();
 }
