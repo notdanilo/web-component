@@ -4,12 +4,6 @@ use wasm_bindgen::JsCast;
 use web_sys::{HtmlElement, CanvasRenderingContext2d, HtmlCanvasElement};
 use web_component::web_component::WebComponent;
 
-impl Drop for AnalogClock {
-    fn drop(&mut self) {
-        web_sys::console::log_1(&"AnalogClock dropped".into());
-    }
-}
-
 pub struct AnalogClock {
     pub element: HtmlElement,
     pub context: Option<CanvasRenderingContext2d>

@@ -27,7 +27,7 @@ pub trait WebComponent {
     /// Draw interval in seconds. None will recursively call requestAnimationFrame.
     fn draw_interval(&self) -> Option<f64> { None }
 
-    /// Run once, return true if you want to request a new animation frame.
+    /// Run once, return true if you want to request a new animation frame to run it again.
     fn draw(&self) -> bool { false }
 
     async fn metadata(&self) -> Option<Metadata> { Default::default() }
@@ -89,11 +89,12 @@ impl<T: WebComponent> CustomElement for T {
             if let Some(callback) = callback.borrow().as_ref() {
                 let callback = callback.as_ref().unchecked_ref();
                 if T::draw(self) {
+                    let window = web_sys::window().unwrap();
                     if let Some(interval) = T::draw_interval(self) {
                         // TODO: Use set_interval outside instead.
-                        web_sys::window().unwrap().set_timeout_with_callback_and_timeout_and_arguments_0(callback, (interval * 1000.0) as i32).unwrap();
+                        window.set_timeout_with_callback_and_timeout_and_arguments_0(callback, (interval * 1000.0) as i32).unwrap();
                     } else {
-                        web_sys::window().unwrap().request_animation_frame(callback).unwrap();
+                        window.request_animation_frame(callback).unwrap();
                     }
                 }
             }
