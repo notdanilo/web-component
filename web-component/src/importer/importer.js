@@ -1,5 +1,5 @@
-export function CreateWebComponent(module, name, path) {
-    let exported_name       = name.replaceAll("-", "_");
+export function CreateWebComponent(module, interface_name, name, path) {
+    let exported_name       = interface_name.replaceAll("-", "_");
     let constructor_        = exported_name + "_constructor";
     let observed_attributes = exported_name + "_observed_attributes";
     class WebComponent extends HTMLElement {

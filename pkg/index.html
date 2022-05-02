@@ -5,13 +5,14 @@
         <script type="module">
             import * as WebComponent from "/web-component/web-component.js";
             await WebComponent.default();
+            window.__WebComponent = WebComponent;
             WebComponent.LoadAll(WebComponent);
         </script>
     </head>
     <body>
         This is a test.
         <web-component path="/clocks"></web-component>
-<!--        <web-component path="/minimal-component"></web-component>-->
+        <web-component path="/minimal-component"></web-component>
         <minimal-component></minimal-component>
         <analog-clock></analog-clock>
         <digital-clock></digital-clock>

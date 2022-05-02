@@ -48,6 +48,7 @@ pub trait WebComponent {
         let path = self.path();
         let name = self.name();
         let index_path = format!("{}/{}.html", path, name);
+        web_sys::console::log_1(&format!("Loading template: {}", index_path).into());
         let window = window().unwrap();
         let response = JsFuture::from(window.fetch_with_str(&index_path)).await.unwrap();
         let response = response.dyn_into::<web_sys::Response>().unwrap();

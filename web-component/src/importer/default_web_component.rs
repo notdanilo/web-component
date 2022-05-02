@@ -16,9 +16,7 @@ impl WebComponent for DefaultWebComponent {
         &self.element
     }
 
-    async fn connected(&mut self) {
-        web_sys::console::log_1(&"Default connected".into());
-    }
+    async fn connected(&mut self) {}
 }
 
 crate::define!(DefaultWebComponent, default_web_component);
