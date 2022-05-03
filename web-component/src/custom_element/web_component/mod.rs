@@ -32,6 +32,10 @@ pub trait WebComponent {
     /// Run once, return true if you want to request a new animation frame to run it again.
     fn draw(&self) -> bool { false }
 
+    async fn style(&self) -> Option<String> {
+        None
+    }
+
     async fn data(&self) -> Option<Box<dyn erased_serde::Serialize>> {
         let window = window().unwrap();
         let path = self.path();
