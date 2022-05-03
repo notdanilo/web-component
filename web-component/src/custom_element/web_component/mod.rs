@@ -5,8 +5,10 @@ use std::rc::Rc;
 use wasm_bindgen::prelude::*;
 use wasm_bindgen::JsCast;
 use async_trait::async_trait;
+use handlebars::Handlebars;
+use serde_json::Value;
 use wasm_bindgen_futures::JsFuture;
-use web_sys::{HtmlElement, HtmlTemplateElement, ShadowRootInit, ShadowRootMode, window};
+use web_sys::{HtmlElement, HtmlTemplateElement, Response, ShadowRootInit, ShadowRootMode, window};
 use crate::CustomElement;
 use metadata::Metadata;
 
@@ -29,6 +31,30 @@ pub trait WebComponent {
 
     /// Run once, return true if you want to request a new animation frame to run it again.
     fn draw(&self) -> bool { false }
+
+    async fn data(&self) -> Option<Box<dyn erased_serde::Serialize>> {
+        let window = window().unwrap();
+        let path = self.path();
+        let name = self.name();
+        let data_path = format!("{}/{}.json", path, name);
+        let response = JsFuture::from(window.fetch_with_str(&data_path))
+            .await
+            .ok()
+            .and_then(|response| response.dyn_into::<Response>().ok())
+            .and_then(|response| response.text().ok());
+        if let Some(response) = response {
+            // let value: Value = serde_json::from_str("{\"name\": \"Daniloooooo\"}").unwrap();
+            // Some(Box::new(value))
+            JsFuture::from(response)
+                .await
+                .ok()
+                .and_then(|text| text.as_string())
+                .and_then(|text| serde_json::from_str::<Value>(&text).ok())
+                .map(|value| Box::new(value) as Box<dyn erased_serde::Serialize>)
+        } else {
+            None
+        }
+    }
 
     async fn metadata(&self) -> Option<Metadata> { Default::default() }
 
@@ -75,7 +101,13 @@ impl<T: WebComponent> CustomElement for T {
             let document = window.document().unwrap();
             let template = document.create_element("div").unwrap();
             if let Some(text) = self.template().await {
-                template.set_inner_html(&text);
+                let reg = Handlebars::new();
+                if let Some(data) = self.data().await {
+                    let text = reg.render_template(&text, &data).unwrap();
+                    template.set_inner_html(&text);
+                } else {
+                    template.set_inner_html(&text);
+                }
             }
             let template = template.first_child().unwrap().dyn_into::<HtmlTemplateElement>().unwrap();
             let node = document.import_node_with_deep(&template.content(), true).unwrap();
