@@ -2,7 +2,7 @@ use async_trait::async_trait;
 use wasm_bindgen::JsCast;
 
 use web_sys::{HtmlElement, CanvasRenderingContext2d, HtmlCanvasElement};
-use web_component::web_component::WebComponent;
+use web_component::WebComponent;
 
 pub struct AnalogClock {
     pub element: HtmlElement,

@@ -1,6 +1,6 @@
 use async_trait::async_trait;
 use web_sys::{HtmlElement};
-use web_component::web_component::WebComponent;
+use web_component::WebComponent;
 
 impl Drop for DigitalClock {
     fn drop(&mut self) {
